@@ -23,6 +23,7 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
 {
     /** @var string */
     protected $audioCodec;
+    protected $hlsFilters;
 
     /** @var int */
     protected $audioKiloBitrate = 128;
@@ -76,6 +77,20 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
         return $this->audioKiloBitrate;
     }
 
+
+    public function setHLSFilters($filters)
+    {
+       
+
+        $this->hlsFilters =  $filters;
+
+        return $this;
+    }
+
+    public function getHLSFilters()
+    {
+        return $this->hlsFilters;
+    }
     /**
      * Sets the kiloBitrate value.
      *

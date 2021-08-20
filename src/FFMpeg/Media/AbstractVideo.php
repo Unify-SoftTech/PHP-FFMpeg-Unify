@@ -198,6 +198,20 @@ abstract class AbstractVideo extends Audio
                 $commands[] = '-ac';
                 $commands[] = $format->getAudioChannels();
             }
+            if (null !== $format->getHlsFilters()) {
+                $commands[] = '-f';
+                $commands[] = 'segment';
+                $commands[] = '-sc_threshold';
+                $commands[] = '0';
+                $commands[] = '-segment_time';
+                $commands[] = '10';
+                $commands[] = '-segment_list';
+                $commands[] = $format->getHlsFilters();
+                $commands[] = '-preset';
+                $commands[] = 'ultrafast';
+                $commands[] = '-segment_format';
+                $commands[] = 'mpegts';
+            }
         }
 
         // If the user passed some additional parameters
