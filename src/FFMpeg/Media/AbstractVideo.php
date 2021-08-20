@@ -198,7 +198,7 @@ abstract class AbstractVideo extends Audio
                 $commands[] = '-ac';
                 $commands[] = $format->getAudioChannels();
             }
-            if (null !== $format->getHlsFilters()) {
+            if (null !== $format->getHLSFilters()) {
                 $commands[] = '-f';
                 $commands[] = 'segment';
                 $commands[] = '-sc_threshold';
@@ -206,7 +206,7 @@ abstract class AbstractVideo extends Audio
                 $commands[] = '-segment_time';
                 $commands[] = '10';
                 $commands[] = '-segment_list';
-                $commands[] = $format->getHlsFilters();
+                $commands[] = $format->getHLSFilters();
                 $commands[] = '-preset';
                 $commands[] = 'ultrafast';
                 $commands[] = '-segment_format';
