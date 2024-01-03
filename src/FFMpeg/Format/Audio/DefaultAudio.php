@@ -13,17 +13,19 @@ namespace FFMpeg\Format\Audio;
 
 use Evenement\EventEmitter;
 use FFMpeg\Exception\InvalidArgumentException;
+use FFMpeg\FFProbe;
 use FFMpeg\Format\AudioInterface;
-use FFMpeg\Media\MediaTypeInterface;
 use FFMpeg\Format\ProgressableInterface;
 use FFMpeg\Format\ProgressListener\AudioProgressListener;
-use FFMpeg\FFProbe;
+use FFMpeg\Media\MediaTypeInterface;
 
 abstract class DefaultAudio extends EventEmitter implements AudioInterface, ProgressableInterface
 {
     /** @var string */
     protected $audioCodec;
+
     protected $hlsFilters;
+
 
     /** @var int */
     protected $audioKiloBitrate = 128;
@@ -36,7 +38,7 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
      */
     public function getExtraParams()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -57,11 +59,8 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
      */
     public function setAudioCodec($audioCodec)
     {
-        if ( ! in_array($audioCodec, $this->getAvailableAudioCodecs())) {
-            throw new InvalidArgumentException(sprintf(
-                    'Wrong audiocodec value for %s, available formats are %s'
-                    , $audioCodec, implode(', ', $this->getAvailableAudioCodecs())
-            ));
+        if (!in_array($audioCodec, $this->getAvailableAudioCodecs())) {
+            throw new InvalidArgumentException(sprintf('Wrong audiocodec value for %s, available formats are %s', $audioCodec, implode(', ', $this->getAvailableAudioCodecs())));
         }
 
         $this->audioCodec = $audioCodec;
@@ -77,24 +76,11 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
         return $this->audioKiloBitrate;
     }
 
-
-    public function setHLSFilters($filters)
-    {
-       
-
-        $this->hlsFilters =  $filters;
-
-        return $this;
-    }
-
-    public function getHLSFilters()
-    {
-        return $this->hlsFilters;
-    }
     /**
      * Sets the kiloBitrate value.
      *
-     * @param  int                  $kiloBitrate
+     * @param int $kiloBitrate
+     *
      * @throws InvalidArgumentException
      */
     public function setAudioKiloBitrate($kiloBitrate)
@@ -109,17 +95,19 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function getAudioChannels()
     {
         return $this->audioChannels;
     }
 
+
     /**
      * Sets the channels value.
      *
-     * @param  int                  $channels
+     * @param int $channels
+     *
      * @throws InvalidArgumentException
      */
     public function setAudioChannels($channels)
@@ -141,10 +129,10 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
         $format = $this;
         $listener = new AudioProgressListener($ffprobe, $media->getPathfile(), $pass, $total, $duration);
         $listener->on('progress', function () use ($media, $format) {
-           $format->emit('progress', array_merge(array($media, $format), func_get_args()));
+            $format->emit('progress', array_merge([$media, $format], func_get_args()));
         });
 
-        return array($listener);
+        return [$listener];
     }
 
     /**
@@ -153,5 +141,18 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
     public function getPasses()
     {
         return 1;
+    }
+    public function setHLSFilters($filters)
+    {
+       
+
+        $this->hlsFilters =  $filters;
+
+        return $this;
+    }
+
+    public function getHLSFilters()
+    {
+        return $this->hlsFilters;
     }
 }
